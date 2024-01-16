@@ -1,0 +1,23 @@
+kind: token
+version: v2
+metadata:
+  # name will be specified in the `tbot` to use this token
+  name: tbot-gcp-example
+spec:
+  roles: [Bot]
+  # bot_name will match the name of the bot created later in this guide.
+  bot_name: gcp-example
+  join_method: gcp
+  gcp:
+    # allow specifies the rules by which the Auth Server determines if `tbot`
+    # should be allowed to join.
+    allow:
+    - project_ids:
+        - tbotexample-305123
+      service_accounts:
+        # This should be the full "name" of a GCP service account. The default
+        # compute service account is not supported.
+        # Do not use the workload identity version! (tbotexample-305123.svc.id.goog[default/tbot-terraform-sa])
+        # Use the full GCP IAM SA name instead.
+        - tbot-terraform-sa@tbotexample-305123.iam.gserviceaccount.com
+        #- tbotexample-305123.svc.id.goog[default/tbot-terraform-sa]

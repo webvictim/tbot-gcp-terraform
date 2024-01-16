@@ -1,0 +1,33 @@
+version: v2
+debug: true
+
+# Input the address of the cluster to join
+# "auth_server" is a little misleading here; this should be a Teleport proxy host/port
+auth_server: teleport.example.com:443
+
+# Run in oneshot mode, outputting one identity and exiting
+oneshot: true
+
+# The identity file outputted should be valid for this length of time.
+# Making this shorter is more secure, but should be valid for the full runtime of your process.
+# 5 minutes is sufficient here for a quick Terraform run
+certificate_ttl: 0h5m0s
+
+# Use the GCP join method to join the cluster and issue an identity
+onboarding:
+  join_method: gcp
+  token: tbot-gcp-example
+
+# There is no need to persist the bot's own identity to disk as it's running in one-shot mode
+storage:
+  type: memory
+
+# Output an "identity" file to the root directory
+# This can be picked up by tsh, tctl or the Teleport Terraform provider and used to authenticate with the cluster
+outputs:
+- type: identity
+  destination:
+    type: directory
+    path: /tbot-output
+    symlinks: try-secure
+    acls: "off"

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: terraform
+spec:
+  serviceAccountName: tbot-terraform-sa
+  nodeSelector:
+    iam.gke.io/gke-metadata-server-enabled: "true"
+  initContainers:
+  - name: tbot
+    image: public.ecr.aws/gravitational/teleport-distroless:14.3.3
+    command: ["tbot", "start", "--config", "/tbot-config/tbot-config.yaml"]
+    volumeMounts:
+    - name: tbot-output
+      mountPath: "/tbot-output"
+    - name: tbot-config
+      mountPath: "/tbot-config"
+  containers:
+  - name: terraform
+    image: hashicorp/terraform:1.6
+    workingDir: /terraform-workdir
+    command: ["/bin/sh"]
+    args: ["-c", "cp -Lr /terraform-code/* /terraform-workdir && terraform init && terraform plan"]
+    volumeMounts:
+    - name: tbot-output
+      mountPath: "/tbot-output"
+    - name: terraform-workdir
+      mountPath: "/terraform-workdir"
+    - name: terraform-code
+      mountPath: "/terraform-code"
+  volumes:
+  - name: terraform-code
+    configMap:
+      name: terraform-code
+  - name: tbot-config
+    configMap:
+      name: tbot-config
+  - name: tbot-output
+    emptyDir: {}
+  - name: terraform-workdir
+    emptyDir: {}

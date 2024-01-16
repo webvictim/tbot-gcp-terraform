@@ -1,0 +1,53 @@
+kind: role
+metadata:
+  name: tbot-terraform
+spec:
+  allow:
+    rules:
+    - resources:
+      # These currently represent all the resources that can be configured by
+      # Terraform. You may wish to remove resources that you do not intend to
+      # configure with Terraform from this list to reduce blast radius.
+      - app
+      - cluster_auth_preference
+      - cluster_networking_config
+      - db
+      - device
+      - github
+      - login_rule
+      - oidc
+      - okta_import_rule
+      - role
+      - saml
+      - session_recording_config
+      - token
+      - trusted_cluster
+      - user
+      verbs:
+      - create
+      - read
+      - update
+      - delete
+      - list
+  deny: {}
+  options:
+    cert_format: standard
+    create_db_user: false
+    create_desktop_user: false
+    desktop_clipboard: true
+    desktop_directory_sharing: true
+    enhanced_recording:
+    - command
+    - network
+    forward_agent: false
+    idp:
+      saml:
+        enabled: true
+    max_session_ttl: 30h0m0s
+    pin_source_ip: false
+    port_forwarding: true
+    record_session:
+      default: best_effort
+      desktop: true
+    ssh_file_copy: true
+version: v4
