@@ -20,4 +20,3 @@ spec:
         # Do not use the workload identity version! (tbotexample-305123.svc.id.goog[default/tbot-terraform-sa])
         # Use the full GCP IAM SA name instead.
         - tbot-terraform-sa@tbotexample-305123.iam.gserviceaccount.com
-        #- tbotexample-305123.svc.id.goog[default/tbot-terraform-sa]
